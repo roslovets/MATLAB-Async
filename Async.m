@@ -94,10 +94,17 @@ classdef Async < handle
             if ~isempty(fcn) && obj.Running
                 if tmr.UserData.CurrentIteration <= tmr.UserData.Iterations
                     data = obj.getData(tmr);
-                    if ~isempty(data)
-                        tmr.UserData.Data = fcn(obj, data);
+                    nin = abs(nargin(fcn));
+                    if nin == 0
+                        in = {};
+                    elseif nin == 1
+                        in = {obj};
                     else
-                        fcn(obj);
+                        in = {obj data};
+                    end
+                    [out{1:0}] = fcn(in{:});
+                    if ~isempty(out)
+                        tmr.UserData.Data = out{1};
                     end
                     tmr.UserData.CurrentIteration = tmr.UserData.CurrentIteration + 1;
                 else
