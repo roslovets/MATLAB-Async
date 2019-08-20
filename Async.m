@@ -1,6 +1,9 @@
 classdef Async < handle
-    %Async Summary of this class goes here
-    %   Detailed explanation goes here
+    %% Execute MATLAB code asynchronously in background
+    % https://github.com/roslovets/MATLAB-Async
+    % by Pavel Roslovets, ETMC Exponenta
+    % https://roslovets.github.io
+    
     
     properties
         Data
@@ -28,11 +31,13 @@ classdef Async < handle
         
         function start(obj)
             %% Start tasks
-            obj.CurrentTaskNum = 1;
-            obj.Running = 1;
-            tmr = obj.Tasks{1}();
-            start(tmr);
-            obj.CurrentTimer = tmr;
+            if ~isempty(obj.Tasks)
+                obj.CurrentTaskNum = 1;
+                obj.Running = 1;
+                tmr = obj.Tasks{1}();
+                start(tmr);
+                obj.CurrentTimer = tmr;
+            end
         end
         
         function stop(obj)
